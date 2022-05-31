@@ -1,10 +1,12 @@
 package com.sistemachamados.repositories;
 
+import com.sistemachamados.models.UsuarioModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.sistemachamados.models.Usuario;
+import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, String> {
-
+@Repository
+public interface UsuarioRepository extends JpaRepository<UsuarioModel, UUID> {
+	boolean existsByEmail(String email);
 }
