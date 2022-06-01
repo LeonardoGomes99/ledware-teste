@@ -1,5 +1,7 @@
 package com.sistemachamados;
 
+import java.time.LocalDateTime;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,8 @@ public class ApiSistemaChamadosApplication {
 	}
 	
 	@GetMapping("/")
-	public String index() {
-		return "Olá Mundo";
+	public static void index() {
+		LocalDateTime myObj = LocalDateTime.now();
+	    System.out.println(myObj);
 	}
 }

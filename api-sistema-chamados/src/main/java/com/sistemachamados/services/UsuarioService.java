@@ -28,8 +28,8 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioModel);
     }
 	
-	public boolean existsByEmail(String licensePlateCar) {
-        return usuarioRepository.existsByEmail(licensePlateCar);
+	public boolean existsByEmail(String email) {
+        return usuarioRepository.existsByEmail(email);
     }
 	
 	public Page<UsuarioModel> findAll(Pageable pageable) {
@@ -38,6 +38,11 @@ public class UsuarioService {
 	
 	public Optional<UsuarioModel> findById(UUID id) {
         return usuarioRepository.findById(id);
+    }
+	
+	@Transactional
+    public void delete(UsuarioModel usuarioModel) {
+		usuarioRepository.delete(usuarioModel);
     }
 	
 	

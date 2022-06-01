@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,13 +36,15 @@ public class UsuarioResource {
 
 	final UsuarioService usuarioService;
 
-	public UsuarioResource(UsuarioService usuarioService) {
+	public UsuarioResource(UsuarioService usuarioService)
+	{
 		super();
 		this.usuarioService = usuarioService;
 	}
 	
 	@PostMapping
-	public ResponseEntity<Object> saveUsuario(@RequestBody @Valid UsuarioDto usuarioDto){
+	public ResponseEntity<Object> saveUsuario(@RequestBody @Valid UsuarioDto usuarioDto)
+	{
 		if(usuarioService.existsByEmail(usuarioDto.getEmail())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Email já sendo Utilizado! ");
         }
@@ -52,17 +55,47 @@ public class UsuarioResource {
 	}
 	
 	@GetMapping
-    public ResponseEntity<Page<UsuarioModel>> getAllUsuario(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+    public ResponseEntity<Page<UsuarioModel>> getAllUsuario(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable)
+	{
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findAll(pageable));
     }
 	
 	@GetMapping("/{id}")
-    public ResponseEntity<Object> getOneUsuario(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> getOneUsuario(@PathVariable(value = "id") UUID id)
+	{
         Optional<UsuarioModel> usuarioOptional = usuarioService.findById(id);
         if (!usuarioOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario Não Encontrado.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(usuarioOptional.get());
     }
+	
+	@DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteUsuario(@PathVariable(value = "id") UUID id)
+	{
+        Optional<UsuarioModel> usuarioModelOptional = usuarioService.findById(id);
+        if (!usuarioModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário Não Encontrado.");
+        }
+        usuarioService.delete(usuarioModelOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário Excluído.");
+    }
+	
+	@PutMapping("/{id}")
+    public ResponseEntity<Object> updateParkingSpot(
+    		@PathVariable(value = "id") UUID id,
+    		@RequestBody @Valid UsuarioDto usuarioDto
+    )
+	{
+		Optional<UsuarioModel> usuarioModelOptional = usuarioService.findById(id);
+        if (!usuarioModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário Não Encontrado.");
+        }
+        var usuarioModel = new UsuarioModel();
+        BeanUtils.copyProperties(usuarioDto, usuarioModel);
+        usuarioModel.setId(usuarioModelOptional.get().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.save(usuarioModel));
+	}
+ 
 
 }
