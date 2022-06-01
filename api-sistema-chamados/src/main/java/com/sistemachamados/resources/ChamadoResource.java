@@ -7,6 +7,10 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,6 +52,12 @@ public class ChamadoResource {
 		
 	}
 	
+	@GetMapping
+    public ResponseEntity<Page<ChamadoModel>> getAllChamados(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable)
+	{
+        return ResponseEntity.status(HttpStatus.OK).body(chamadoService.findAll(pageable));
+    }
+	
 	@GetMapping("/all/{id}")
     public ResponseEntity<Object> getChamadosByUserId(@PathVariable(value = "id") UUID usuarioId)
 	{
@@ -57,6 +67,23 @@ public class ChamadoResource {
         }
         return ResponseEntity.status(HttpStatus.OK).body(chamadoOptional);
     }
+	
+	@PutMapping("/{id}")
+    public ResponseEntity<Object> updateChamado(
+    		@PathVariable(value = "id") UUID id,
+    		@RequestBody @Valid ChamadoDto chamadoDto
+    )
+	{
+		Optional<ChamadoModel> chamadoModelOptional = chamadoService.findById(id);
+        if (!chamadoModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Chamado Não Encontrado.");
+        }
+        var chamadoModel = new ChamadoModel();
+        BeanUtils.copyProperties(chamadoDto, chamadoModel);
+        chamadoModel.setId(chamadoModelOptional.get().getId());
+        chamadoModel.setUsuarioId(chamadoModelOptional.get().getUsuarioId());
+        return ResponseEntity.status(HttpStatus.OK).body(chamadoService.save(chamadoModel));
+	}
 	
 	@DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteChamado(@PathVariable(value = "id") UUID id)
@@ -68,22 +95,5 @@ public class ChamadoResource {
         chamadoService.delete(chamadoModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Chamado Excluído.");
     }
-	
-	@PutMapping("/{id}")
-    public ResponseEntity<Object> updateParkingSpot(
-    		@PathVariable(value = "id") UUID id,
-    		@RequestBody @Valid ChamadoDto chamadoDto
-    )
-	{
-		Optional<ChamadoModel> chamadoModelOptional = chamadoService.findById(id);
-        if (!chamadoModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário Não Encontrado.");
-        }
-        var chamadoModel = new ChamadoModel();
-        BeanUtils.copyProperties(chamadoDto, chamadoModel);
-        chamadoModel.setId(chamadoModelOptional.get().getId());
-        chamadoModel.setUsuarioId(chamadoModelOptional.get().getUsuarioId());
-        return ResponseEntity.status(HttpStatus.OK).body(chamadoService.save(chamadoModel));
-	}
 	
 }

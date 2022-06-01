@@ -22,6 +22,7 @@ public class ChamadoDto {
 	@NotBlank
 	private String data;
 	
+	@NotNull
 	private UUID usuarioId;
 
 	public String getAssunto() {

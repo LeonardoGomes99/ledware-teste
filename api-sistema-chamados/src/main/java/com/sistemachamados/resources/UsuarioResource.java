@@ -70,19 +70,8 @@ public class UsuarioResource {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioOptional.get());
     }
 	
-	@DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUsuario(@PathVariable(value = "id") UUID id)
-	{
-        Optional<UsuarioModel> usuarioModelOptional = usuarioService.findById(id);
-        if (!usuarioModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário Não Encontrado.");
-        }
-        usuarioService.delete(usuarioModelOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Usuário Excluído.");
-    }
-	
 	@PutMapping("/{id}")
-    public ResponseEntity<Object> updateParkingSpot(
+    public ResponseEntity<Object> updateUsuario(
     		@PathVariable(value = "id") UUID id,
     		@RequestBody @Valid UsuarioDto usuarioDto
     )
@@ -96,6 +85,15 @@ public class UsuarioResource {
         usuarioModel.setId(usuarioModelOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.save(usuarioModel));
 	}
- 
-
+	
+	@DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteUsuario(@PathVariable(value = "id") UUID id)
+	{
+        Optional<UsuarioModel> usuarioModelOptional = usuarioService.findById(id);
+        if (!usuarioModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário Não Encontrado.");
+        }
+        usuarioService.delete(usuarioModelOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário Excluído.");
+    }
 }

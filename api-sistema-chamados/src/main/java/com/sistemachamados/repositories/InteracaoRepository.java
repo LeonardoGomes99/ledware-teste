@@ -1,5 +1,13 @@
 package com.sistemachamados.repositories;
 
-public class InteracaoRepository {
+import java.util.UUID;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.sistemachamados.models.InteracaoModel;
+
+@Repository
+public interface InteracaoRepository extends JpaRepository<InteracaoModel, UUID> {
+	
 }
