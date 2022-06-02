@@ -29,12 +29,15 @@ public class FileUploader {
 		        System.out.println("Bucket 'interacao' Criado");
 
 		      }
+		      
+		      String image = "";
+		      
 
 		      minioClient.uploadObject(
 		          UploadObjectArgs.builder()
 		              .bucket("interacao")
-		              .object("test.txt")
-		              .filename("C:\\test\\files\\test.txt")
+		              .object("test.jpg")
+		              .filename(image)
 		              .build());
 		      System.out.println(
 		          "'/home/user/Photos/asiaphotos.zip' is successfully uploaded as "
@@ -43,5 +46,5 @@ public class FileUploader {
 		      System.out.println("Error occurred: " + e);
 		      System.out.println("HTTP trace: " + e.httpTrace());
 		    }
-		  }
+	}
 }
