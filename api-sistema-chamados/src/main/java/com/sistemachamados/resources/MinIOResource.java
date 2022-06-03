@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistemachamados.dtos.MinIODto;
+import com.sistemachamados.models.ChamadoModel;
 import com.sistemachamados.models.MinIOModel;
 import com.sistemachamados.services.MinIOService;
 
@@ -35,10 +37,30 @@ public class MinIOResource {
 		this.minioService = minioService;
 	}
 	
+	@GetMapping("/all/{id}")
+	public ResponseEntity<Object> getAllImages(@PathVariable(value = "id") UUID id)
+	{		
+		List minioModelOptional = minioService.findByChamadoId(id);	 
+		var minioModel = new MinIOModel();
+
+		int size = minioModelOptional.size();
+				
+		Object [] ArchiveChamadoWithUrl = new Object [size];		
+
+        
+        for (int i = 0; i < size; i++) {        	
+        	BeanUtils.copyProperties(minioModelOptional.get(i), minioModel);
+			ArchiveChamadoWithUrl[i] = minioService.getAllUrl(minioModel.getId());
+        }
+
+    	return ResponseEntity.status(HttpStatus.CREATED).body(ArchiveChamadoWithUrl); 
+ 	        
+	}
+	
 	@PostMapping
 	public ResponseEntity<Object> saveArquivo(@RequestBody @Valid MinIODto minioDto)
 	{		
-		var urlArquivoLocal = MinIOService.convertBase64ToImage(minioDto);		
+		var urlArquivoLocal = MinIOService.convertBase64ToArchive(minioDto);		
 		if(urlArquivoLocal == "Error") {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Não foi possivel subir este arquivo para Nuvem");
 		}		
@@ -73,9 +95,14 @@ public class MinIOResource {
 	@DeleteMapping("/all/{id}")
 	public ResponseEntity<Object> deleteAllArchives(@PathVariable(value = "id") UUID id)
 	{		
-	        List<MinIOModel> minioModelOptional = minioService.findByChamadoId(id);
-	        minioService.deleteAll(minioModelOptional.get(0));
-	        return ResponseEntity.status(HttpStatus.CREATED).body(minioModelOptional.get(0)); 
+		List<MinIOModel> minioModelOptional = minioService.findByChamadoId(id);	        	       
+        int size = minioModelOptional.size();
+        
+        for (int i = 0; i < size; i++) {
+        	minioService.deleteAllArchives(minioModelOptional.get(i));
+        }
+        	        	        
+        return ResponseEntity.status(HttpStatus.CREATED).body("Ok"); 
  	        
 	}
 

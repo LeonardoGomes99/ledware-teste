@@ -8,15 +8,20 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.net.*;  
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +46,7 @@ public class MinIOService {
 		this.minioRepository = minioRepository;
 	}
 	
-	public static String convertBase64ToImage(MinIODto minioDto) {			
+	public static String convertBase64ToArchive(MinIODto minioDto) {			
 		
 		String arquivo = minioDto.getArquivo();
 		String nomeArquivo = minioDto.getNomeArquivo();
@@ -68,7 +73,6 @@ public class MinIOService {
 	public boolean UploadToMinio(MinIODto minioDto) {
 	  String nomeBucket = "interacoes";
 	  try {
-          // Create a minioClient with the MinIO server playground, its access key and secret key.
           MinioClient minioClient =
               MinioClient.builder()
                   .endpoint("http://127.0.0.1:9000")
@@ -111,6 +115,51 @@ public class MinIOService {
         return minioRepository.findByChamadoId(id);
     }
 	
+
+	public String[] getAllUrl(UUID id) {
+		String nomeBucket = "interacoes";
+
+		Optional<MinIOModel> minioRequest = minioRepository.findById(id);
+		var minioModel = new MinIOModel();
+    	BeanUtils.copyProperties(minioRequest.get(), minioModel);
+				
+        String [] ArchiveChamadoWithUrl = new String [8];
+        
+        ArchiveChamadoWithUrl[0] = minioModel.getId().toString();
+        ArchiveChamadoWithUrl[1] = minioModel.getNomeArquivo();
+        ArchiveChamadoWithUrl[2] = minioModel.getTipoArquivo();
+        ArchiveChamadoWithUrl[3] = minioModel.getUrlArquivo();
+        ArchiveChamadoWithUrl[4] = minioModel.getInteracaoId().toString();
+        ArchiveChamadoWithUrl[5] = minioModel.getChamadoId().toString();
+        ArchiveChamadoWithUrl[6] = minioModel.getUsuarioId().toString(); 
+        
+        try {
+	        MinioClient minioClient =
+		              MinioClient.builder()
+		                  .endpoint("http://127.0.0.1:9000")
+		                  .credentials("minioadmin", "minioadmin")
+		                  .build();
+	        
+	        ArchiveChamadoWithUrl[7] = minioClient.getPresignedObjectUrl(
+	                GetPresignedObjectUrlArgs.builder()
+	                .method(Method.GET)
+	                .bucket(nomeBucket)
+	                .object(minioModel.getUrlArquivo().toString())
+	                .expiry(2, TimeUnit.HOURS)             
+	                .build());
+	        
+	        return ArchiveChamadoWithUrl;
+
+        }catch(Exception e) {
+        	ArchiveChamadoWithUrl[7] = "Not Found";
+	        return ArchiveChamadoWithUrl;
+        }
+        
+
+
+    }			
+       
+	
 	@Transactional
     public boolean deleteArchive(MinIOModel minioModel) {	
 		String nomeBucket = "interacoes";
@@ -127,25 +176,24 @@ public class MinIOService {
 			return false;
 		}		
     }	
-	
-	@Transactional
-	public void deleteAll( MinIOModel minioModel ) {
 		
+	@Transactional
+	public void deleteAllArchives( MinIOModel minioModel) {		
+		String nomeBucket = "interacoes";
 		try {
-			String nomeBucket = "interacoes";
-			String objectArchive = String.format("%s/%s", minioModel.getUsuarioId().toString(),minioModel.getChamadoId().toString());
 			MinioClient minioClient =
 		              MinioClient.builder()
 		                  .endpoint("http://127.0.0.1:9000")
 		                  .credentials("minioadmin", "minioadmin")
 		                  .build();
-			
-			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(objectArchive).build());
-			minioRepository.deleteByChamadoId(minioModel.getChamadoId());	
-			System.out.print("Foi");
+			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUrlArquivo()).build());	
+			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUsuarioId()+"/"+minioModel.getChamadoId()+"/"+minioModel.getInteracaoId()).build());
+			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUsuarioId()+"/"+minioModel.getChamadoId()).build());	
+
+			minioRepository.delete(minioModel);
+			System.out.println("Arquivo " + minioModel.getId());
+
 		}catch(Exception e) {
-			System.out.print("Deu Erro");
-		}
-		
+		}	
     }
 }
