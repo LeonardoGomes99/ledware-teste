@@ -75,6 +75,8 @@ public class MinIOResource {
 		var minioModel = new MinIOModel();
         BeanUtils.copyProperties(minioDto, minioModel);
         
+        minioService.removeLocalFolder(minioModel.getInteracaoId());
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(minioService.save(minioModel));       	
 	}
 	

@@ -70,6 +70,17 @@ public class MinIOService {
         return minioRepository.save(minioModel);
     }	
 	
+	public static void removeLocalFolder(UUID folderLocation) {
+        String arquivoDeleteStatic = String.format("src\\main\\resources\\static\\%s", folderLocation.toString());
+        File index = new File(arquivoDeleteStatic);
+        String[]entries = index.list();
+        for(String s: entries){
+            File currentFile = new File(index.getPath(),s);
+            currentFile.delete();
+        }
+        index.delete();
+	}
+	
 	public boolean UploadToMinio(MinIODto minioDto) {
 	  String nomeBucket = "interacoes";
 	  try {
