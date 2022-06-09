@@ -1,0 +1,121 @@
+textarea{
+    display: block;
+    margin: 0;
+    height: 50px;
+    width: 50%;
+    border: 2px solid #74637f;
+    border-radius: 0;
+    color: #444;
+    background-color: transparent;
+    overflow: auto;
+    resize: none;
+    transition: transform 1s;
+  }
+
+
+.main-container{
+    display: block;
+    align-items: center;
+    justify-content: center;
+}
+
+.chamado-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 100px;
+}
+
+.chamado-container-group-infos{
+    display: flex;
+}
+
+.chamado-container-infos{
+    display: block;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;;
+}
+
+
+
+.interacao-container{
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.interacao-container-items{
+    display: block;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 20px 20px;
+    border: 1px solid black;
+    margin-bottom: 20px;
+}
+
+.interacao-container-item{
+    display: block;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 20px 20px;
+}
+
+.interacao-container-item-values{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.archives-container{
+    display: block;
+    border: 1px solid black;
+    margin-top: 20px;
+}
+
+.file-uploader{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.file-uploader input[type="file"] {
+    display: none;
+}
+.file-uploader label {
+    padding: 15px 15px;
+    font-size: 15px;
+    width: 150px;
+    background-color: #333;
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.main-files-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.files-container{
+    padding: 20px 20px 20px 20px;
+}
+
+.file {
+    padding: 20px 20px 20px 20px;
+    margin-bottom: 20px;
+}
+
+.file a{
+    border: 1px solid black;
+    padding: 20px
+}

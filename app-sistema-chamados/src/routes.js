@@ -20,7 +20,7 @@ function RoutesApp(){
 
                 <Route path="/chamado" element={ <ChamadoCreate/>} />
 
-                <Route path="/chamado/:id" element={ <ChamadoEdit/>} />
+                <Route path="/chamado/edit/:id" element={ <ChamadoEdit/>} />
 
                 <Route path="/*" element={ <NotFound/>} />
             </Routes>
