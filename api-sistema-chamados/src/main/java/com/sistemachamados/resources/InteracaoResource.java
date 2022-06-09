@@ -1,5 +1,6 @@
 package com.sistemachamados.resources;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,7 +27,6 @@ import com.sistemachamados.models.UsuarioModel;
 import com.sistemachamados.services.InteracaoService;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/interacao")
 public class InteracaoResource {
 	
@@ -46,13 +46,23 @@ public class InteracaoResource {
 	}
 	
 	@GetMapping("/{id}")
-    public ResponseEntity<Object> getOneUsuario(@PathVariable(value = "id") UUID id)
+    public ResponseEntity<Object> getOneInteracao(@PathVariable(value = "id") UUID id)
 	{
         Optional<InteracaoModel> InteracaoOptional = interacaoService.findById(id);
         if (!InteracaoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Interação Não Encontrado.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(InteracaoOptional.get());
+    }
+	
+	@GetMapping("/getAllByChamadoId/{id}")
+    public ResponseEntity<Object> findByChamadoId(@PathVariable(value = "id") UUID id)
+	{
+        List <InteracaoModel> InteracaoOptional = interacaoService.findByChamadoId(id);
+        if (InteracaoOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Interação Não Encontrado.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(InteracaoOptional);
     }
 	
 	@PutMapping("/{id}")
@@ -83,6 +93,18 @@ public class InteracaoResource {
         interacaoService.delete(interacaoModelOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Interação Excluída.");
     }
+	
+	@DeleteMapping("/deleteByChamadoId/{id}")
+	public ResponseEntity<Object> deleteByChamadoId(@PathVariable(value = "id") UUID id)
+	{   try {
+		interacaoService.deleteByChamadoId(id);
+        	return ResponseEntity.status(HttpStatus.OK).body("Interação Excluída.");
+		}catch(Exception e) {
+	        return ResponseEntity.status(HttpStatus.OK).body("Nenhuma Interação Encontrada");
+		}
+        
+
+	}
 	
 	
 

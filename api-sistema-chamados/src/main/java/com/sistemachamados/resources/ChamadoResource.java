@@ -31,7 +31,6 @@ import com.sistemachamados.services.ChamadoService;
 import com.sistemachamados.services.UsuarioService;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/chamado")
 public class ChamadoResource {
 
@@ -56,6 +55,14 @@ public class ChamadoResource {
     public ResponseEntity<Page<ChamadoModel>> getAllChamados(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable)
 	{
         return ResponseEntity.status(HttpStatus.OK).body(chamadoService.findAll(pageable));
+    }
+	
+	@GetMapping("/{id}")
+    public ResponseEntity<Object> getChamadoById(@PathVariable(value = "id") UUID id)
+	{
+		Optional<ChamadoModel> chamadoModelOptional = chamadoService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(chamadoModelOptional.get());
+		
     }
 	
 	@GetMapping("/all/{id}")

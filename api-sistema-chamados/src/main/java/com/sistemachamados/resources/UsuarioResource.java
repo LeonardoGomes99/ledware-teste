@@ -30,7 +30,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/usuario")
 public class UsuarioResource {
 

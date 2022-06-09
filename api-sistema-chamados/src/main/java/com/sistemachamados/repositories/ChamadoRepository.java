@@ -13,5 +13,5 @@ import com.sistemachamados.models.ChamadoModel;
 @Repository
 public interface ChamadoRepository extends JpaRepository<ChamadoModel, UUID> {
 //	@Query(value = "SELECT * FROM chamados", nativeQuery = true)			  
-	List <ChamadoModel> findAllByUsuarioId(UUID usuarioId);
+	List <ChamadoModel> findAllByUsuarioId(UUID usuarioId);	
 }

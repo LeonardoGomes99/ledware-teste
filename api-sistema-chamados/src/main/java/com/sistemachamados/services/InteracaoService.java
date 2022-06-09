@@ -1,5 +1,6 @@
 package com.sistemachamados.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,9 +33,18 @@ public class InteracaoService {
         return interacaoRepository.findById(id);
     }
 	
+	public List <InteracaoModel> findByChamadoId(UUID id) {
+        return interacaoRepository.findByChamadoId(id);
+    }
+	
 	@Transactional
     public void delete(InteracaoModel interacaoModel) {
 		interacaoRepository.delete(interacaoModel);
     }
+	
+	@Transactional
+	public void deleteByChamadoId(UUID id) {
+		interacaoRepository.deleteByChamadoId(id);
+	}
 
 }

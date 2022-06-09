@@ -25,7 +25,6 @@ import com.sistemachamados.models.MinIOModel;
 import com.sistemachamados.services.MinIOService;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/MinIO")
 public class MinIOResource {
 	
@@ -96,15 +95,19 @@ public class MinIOResource {
 	
 	@DeleteMapping("/all/{id}")
 	public ResponseEntity<Object> deleteAllArchives(@PathVariable(value = "id") UUID id)
-	{		
-		List<MinIOModel> minioModelOptional = minioService.findByChamadoId(id);	        	       
-        int size = minioModelOptional.size();
-        
-        for (int i = 0; i < size; i++) {
-        	minioService.deleteAllArchives(minioModelOptional.get(i));
-        }
-        	        	        
-        return ResponseEntity.status(HttpStatus.CREATED).body("Ok"); 
+	{	
+		try {
+			List<MinIOModel> minioModelOptional = minioService.findByChamadoId(id);	        	       
+	        int size = minioModelOptional.size();
+	        
+	        for (int i = 0; i < size; i++) {
+	        	minioService.deleteAllArchives(minioModelOptional.get(i));
+	        }	        	        	        
+	        return ResponseEntity.status(HttpStatus.CREATED).body("Todas os arquivos foram excluídos"); 
+		}catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum arquivo encontrado");
+		}
+		
  	        
 	}
 
