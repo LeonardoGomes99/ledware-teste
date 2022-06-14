@@ -17,12 +17,13 @@ function ChamadoEdit () {
     const [interacaoArchives, setInteracaoArchives] = useState();
 
     function chamadoInput(e){
+        
         let attribute = e.target.name;
         let value = e.target.value;
-        let newChamadoValues = [...chamado];
-        newChamadoValues[attribute] = value;
-        console.log(newChamadoValues);
-        setChamado(newChamadoValues);
+        let newChamado = {...chamado};
+        newChamado[attribute] = value;
+        setChamado(newChamado);
+        
     }
 
     function interacaoInput(e){
@@ -56,12 +57,15 @@ function ChamadoEdit () {
     function ListaArquivos(interacaoId){
         return(
             interacaoArchives?.map((e,index) => {
-                if(e[4] == interacaoId)
+                if(e[4] === interacaoId)
                 {
                     return(                        
                         <div key={e[0]} className='files-container'>
+                            <div className='delete-file-container'>
+                                <span className='delete-file'>X</span>
+                            </div>
                             <div className='file'>
-                                <a href={e[7]} target="_blank"> {e[1] +`.`+ e[2] } </a>
+                                <a href={e[7]} target="_blank" rel="noreferrer" > {e[1] +`.`+ e[2] } </a>
                             </div>
                         </div>                                  
                     )
@@ -79,22 +83,45 @@ function ChamadoEdit () {
         <div className='main-container'>
             <div className='chamado-container'>
                 <div className='chamado-container-group-infos'>
+                    
                     <div className='chamado-container-infos'>
-                        <label>Assunto</label>
-                        <br/>
-                        <input type="text" value={chamado.assunto || ""} name="assunto" onChange={e => chamadoInput(e)} ></input>
+
+                        <div className='chamado-container-infos-label'>
+                            <label>Assunto</label>
+                        </div>
+
+                        <div className='chamado-container-infos-textarea'>
+                            <input type="text" value={chamado.assunto || ""} name="assunto" onChange={e => chamadoInput(e)} ></input>
+                        </div>
+
                     </div>
 
                     <div className='chamado-container-infos'>
-                        <label>Tipo</label>
-                        <br/>
-                        <input type="text" value={chamado.tipo || ""} name="tipo" onChange={e => chamadoInput(e)}></input>
+
+                        <div className='chamado-container-infos-label'>
+                            <label>Tipo</label>
+                        </div>
+
+                        <div className='chamado-container-infos-textarea'>
+                            <input type="text" value={chamado.tipo || ""} name="tipo" onChange={e => chamadoInput(e)}></input>
+                        </div>
+
                     </div>
 
                     <div className='chamado-container-infos'>
-                        <label>Descrição</label>
-                        <br/>
-                        <textarea type="text" value={chamado.descricao || ""} name="descricao" onChange={e => chamadoInput(e)} ></textarea>
+
+                        <div className='chamado-container-infos-label'>
+                            <label>Descrição</label>
+                        </div>
+
+                        <div className='chamado-container-infos-textarea'>
+                            <textarea type="text" value={chamado.descricao || ""} name="descricao" onChange={e => chamadoInput(e)} ></textarea>
+                        </div>
+
+                        <div className='chamado-controller'>
+                                <button>Atualizar Informações</button>                                                        
+                        </div>
+
                     </div>
                 </div>
             </div>

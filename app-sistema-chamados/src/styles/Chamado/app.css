@@ -27,14 +27,55 @@ textarea{
 }
 
 .chamado-container-group-infos{
-    display: flex;
+    display: block;
+    align-items: center;
+    width: 100%;
 }
 
 .chamado-container-infos{
     display: block;
     justify-content: center;
     flex-wrap: wrap;
-    flex-direction: row;;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.chamado-controller{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.chamado-controller button{
+    padding: 15px 15px 15px 15px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.chamado-controller button:hover{
+    transition: 0.3;
+    background-color: rgb(54, 54, 54);
+}
+
+.chamado-container-infos-label{
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.chamado-container-infos-textarea{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.chamado-container-infos-textarea textarea{ 
+    width: 30%;
 }
 
 
@@ -85,6 +126,7 @@ textarea{
 .file-uploader input[type="file"] {
     display: none;
 }
+
 .file-uploader label {
     padding: 15px 15px;
     font-size: 15px;
@@ -98,6 +140,20 @@ textarea{
     cursor: pointer;
 }
 
+.file-uploader label:hover {
+    padding: 15px 15px;
+    font-size: 15px;
+    width: 150px;
+    background-color: rgb(141, 136, 136);
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
 .main-files-container {
     display: flex;
     align-items: center;
@@ -108,6 +164,20 @@ textarea{
 
 .files-container{
     padding: 20px 20px 20px 20px;
+}
+
+.delete-file-container{
+    display: flex;
+    justify-content: right;
+}
+
+.delete-file{
+    border-radius:70%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: red;
+    color: white;
+    padding: 5px;
+    cursor: pointer;
 }
 
 .file {

@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+  db_postgres:
+    image: postgres
+    container_name: postgres_container
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+        - api-backend
+
+
+  api:
+    build: .
+    restart: always
+    depends_on:
+      - db_postgres
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_USER: postgres
+      DATABASE_NAME: postgres
+      DATABASE_PORT: 5432 
+    networks:
+        - api-backend
+
+networks:
+  api-backend:
