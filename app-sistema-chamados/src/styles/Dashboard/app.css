@@ -1,8 +1,66 @@
+.dashboard-container{
+  margin-top: 10%;
+}
+
+.chamados-container{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chamados-container-create-chamado{
+  padding: 20px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+.chamadosTable{
+  margin-top: 10px;
+  border: 1px solid;
+}
+
+td {
+  padding: 15px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table-editar{
+  padding: 10px;
+}
+
+.table-deletar {
+  padding: 10px;
+}
+
 table, td, th {
     border: 1px solid;
   }
+
   
   table {
     width: 100%;
     border-collapse: collapse;
+  }
+
+
+  @media only screen and (max-width: 600px) {
+    .chamadosTable {
+      width: 100%;
+      margin-bottom: 15px;
+      overflow-y: hidden;
+      -ms-overflow-style: -ms-autohiding-scrollbar;
+      border: 1px solid #ddd;
+    }
+    .table-responsive > .table {
+        margin-bottom: 0;
+    }
+    .table-responsive > .table > thead > tr > th,
+    .table-responsive > .table > tbody > tr > th,
+    .table-responsive > .table > tfoot > tr > th,
+    .table-responsive > .table > thead > tr > td,
+    .table-responsive > .table > tbody > tr > td,
+    .table-responsive > .table > tfoot > tr > td {
+        white-space: nowrap;
+    }
   }

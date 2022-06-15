@@ -126,6 +126,10 @@ public class MinIOService {
         return minioRepository.findByChamadoId(id);
     }
 	
+	public List<MinIOModel> findByInteracaoId(UUID id){
+		return minioRepository.findByInteracaoId(id);
+	}
+	
 
 	public String[] getAllUrl(UUID id) {
 		String nomeBucket = "interacoes";
@@ -200,6 +204,25 @@ public class MinIOService {
 			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUrlArquivo()).build());	
 			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUsuarioId()+"/"+minioModel.getChamadoId()+"/"+minioModel.getInteracaoId()).build());
 			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUsuarioId()+"/"+minioModel.getChamadoId()).build());	
+
+			minioRepository.delete(minioModel);
+			System.out.println("Arquivo " + minioModel.getId());
+
+		}catch(Exception e) {
+		}	
+    }
+	
+	@Transactional
+	public void deleteAllArchivesByInteracaoId( MinIOModel minioModel) {		
+		String nomeBucket = "interacoes";
+		try {
+			MinioClient minioClient =
+		              MinioClient.builder()
+		                  .endpoint("http://127.0.0.1:9000")
+		                  .credentials("minioadmin", "minioadmin")
+		                  .build();
+			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUrlArquivo()).build());	
+			minioClient.removeObject(RemoveObjectArgs.builder().bucket(nomeBucket).object(minioModel.getUsuarioId()+"/"+minioModel.getChamadoId()+"/"+minioModel.getInteracaoId()).build());
 
 			minioRepository.delete(minioModel);
 			System.out.println("Arquivo " + minioModel.getId());

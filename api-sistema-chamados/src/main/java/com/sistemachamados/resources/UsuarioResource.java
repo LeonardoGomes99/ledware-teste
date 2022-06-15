@@ -1,5 +1,6 @@
 package com.sistemachamados.resources;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.BeanUtils;
 
+import com.sistemachamados.dtos.LoginDto;
 import com.sistemachamados.dtos.UsuarioDto;
 import com.sistemachamados.models.UsuarioModel;
 import com.sistemachamados.repositories.UsuarioRepository;
@@ -51,6 +53,18 @@ public class UsuarioResource {
 		BeanUtils.copyProperties(usuarioDto, usuarioModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarioModel));
 		
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<Object> loginUsuario(@RequestBody @Valid LoginDto loginDto){		
+
+		Optional<UsuarioModel> usuarioModelOptional = usuarioService.Login(loginDto.getEmail(),loginDto.getSenha());
+				
+		if(!usuarioModelOptional.isPresent()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email ou Senha Incorretos");
+		}
+		
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioModelOptional);
 	}
 	
 	@GetMapping

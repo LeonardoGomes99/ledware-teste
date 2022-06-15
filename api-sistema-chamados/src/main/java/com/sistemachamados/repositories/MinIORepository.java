@@ -12,5 +12,6 @@ import com.sistemachamados.models.MinIOModel;
 @Repository
 public interface MinIORepository extends JpaRepository<MinIOModel, UUID>{
 	List <MinIOModel> findByChamadoId(UUID chamadoId);
+	List <MinIOModel> findByInteracaoId(UUID interacaoId);
 	void deleteByChamadoId(UUID chamadoId);
 }

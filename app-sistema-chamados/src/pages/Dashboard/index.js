@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import api from '../../services/api';
 
-//import axios from 'axios';
+import Header from '../../components/Header';
 
 import styles from '../../styles/Dashboard/app.css';
 
@@ -63,26 +63,40 @@ function Dashboard() {
 
     return (
       <div>
-        <div className='chamadosTable'>
-            <table>
-              <tbody>
-              
-                {chamados.map((chamado, index) => {
-                  return(
-                    <tr key={chamado.id}>
-                      <td>{chamado.assunto}</td>
-                      <td>{chamado.tipo}</td>
-                      <td>{chamado.descricao}</td>
-                      <td>{chamado.data}</td>
-                      <td><Link to={`${resourceChamado}/edit/${chamado.id}`} >Editar</Link></td>
-                      <td><button id={chamado.id} name={index} onClick={(e) => deleteChamados(e)} > Deletar </button></td>
-                    </tr>
-                  )
-                })}  
-
-              </tbody>
-            </table>
+        <Header/>
+        <div className='dashboard-container'>
+          <div className='chamados-container'>
+           <Link to='/chamado'><button className='chamados-container-create-chamado'>Criar Chamado</button></Link>
           </div>
+
+          <div className='chamadosTable'>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Assunto</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Editar</th>
+                    <th>Excluir</th>
+                  </tr>
+                  {chamados?.map((chamado, index) => {
+                    return(
+                      <tr key={chamado.id}>
+                        <td>{chamado.assunto}</td>
+                        <td>{chamado.tipo}</td>
+                        <td>{chamado.descricao}</td>
+                        <td>{chamado.data}</td>
+                        <td class="td-editar"><Link to={`${resourceChamado}/edit/${chamado.id}`} ><button className='table-editar'>Editar</button></Link></td>
+                        <td class="td-deletar"><button className='table-deletar' id={chamado.id} name={index} onClick={(e) => deleteChamados(e)} > Deletar </button></td>
+                      </tr>
+                    )
+                  })}  
+
+                </tbody>
+              </table>
+            </div>
+        </div>
       </div>
     );
   }

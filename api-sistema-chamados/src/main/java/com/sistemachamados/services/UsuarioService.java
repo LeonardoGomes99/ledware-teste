@@ -2,6 +2,8 @@ package com.sistemachamados.services;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -27,6 +29,10 @@ public class UsuarioService {
 	public UsuarioModel save(UsuarioModel usuarioModel) {
         return usuarioRepository.save(usuarioModel);
     }
+	
+	public Optional<UsuarioModel> Login(String email, String senha) {
+		return usuarioRepository.findByEmailAndSenha(email,senha);
+	}
 	
 	public boolean existsByEmail(String email) {
         return usuarioRepository.existsByEmail(email);

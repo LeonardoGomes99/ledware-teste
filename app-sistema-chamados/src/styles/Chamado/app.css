@@ -42,21 +42,21 @@ textarea{
     margin-bottom: 40px;
 }
 
-.chamado-controller{
+.submit-changes-controller{
     margin-top: 30px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-.chamado-controller button{
+.submit-changes-controller button{
     padding: 15px 15px 15px 15px;
     background-color: black;
     color: white;
     cursor: pointer;
 }
 
-.chamado-controller button:hover{
+.submit-changes-controller button:hover{
     transition: 0.3;
     background-color: rgb(54, 54, 54);
 }
@@ -85,6 +85,39 @@ textarea{
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
+}
+
+.interacao-controls {
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+}
+
+.refresh-interacao-container {
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+    margin-right: 10vh;
+}
+
+.refresh-interacao-button {
+    padding: 20px;
+    background-color: black;
+    color: #fff;
+    cursor: pointer;
+}
+
+.create-new-interacao-container {
+    display: flex;
+    justify-content: right;
+    flex-wrap: wrap;
+}
+
+.create-new-interacao-button {
+    padding: 20px;
+    background-color: black;
+    color: #fff;
+    cursor: pointer;
 }
 
 .interacao-container-items{

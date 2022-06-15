@@ -93,6 +93,23 @@ public class MinIOResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(StatusDelete);       	
 	}
 	
+	@DeleteMapping("/deleteAllByInteracaoId/{id}")
+	public ResponseEntity<Object> deleteArchiveByInteracaoId(@PathVariable(value = "id") UUID id)
+	{
+		try {
+			List<MinIOModel> minioModelOptional = minioService.findByInteracaoId(id);	        	       
+	        int size = minioModelOptional.size();
+	        
+	        for (int i = 0; i < size; i++) {
+	        	minioService.deleteAllArchivesByInteracaoId(minioModelOptional.get(i));
+	        }	        	        	        
+	        return ResponseEntity.status(HttpStatus.CREATED).body("Todas os arquivos foram excluídos"); 
+		}catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum arquivo encontrado");
+		}
+             	
+	}
+	
 	@DeleteMapping("/all/{id}")
 	public ResponseEntity<Object> deleteAllArchives(@PathVariable(value = "id") UUID id)
 	{	

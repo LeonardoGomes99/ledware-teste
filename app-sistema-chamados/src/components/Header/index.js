@@ -7,7 +7,7 @@ export default class Header extends Component {
         return(
             <header>
                 <h3 className="logo">Sistema de Chamados</h3>
-                <Link className="favoritos" to="/favoritos">Meus Chamados</Link>
+                <Link className="favoritos" to="/dashboard">Meus Chamados</Link>
             </header>
         )
     }
