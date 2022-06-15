@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import api from '../../services/api';
-import { Link,useParams } from 'react-router-dom' 
+import { Link,useParams,useNavigate } from 'react-router-dom' 
 
 import '../../styles/Chamado/app.css';
 
@@ -17,6 +17,7 @@ function ChamadoEdit () {
     const [interacaoArchives, setInteracaoArchives] = useState();
     const [usuarioId] = useState(window.sessionStorage.getItem("usuarioId"));
     const [fileUpload, setFileUpload] = useState();
+    const navigate = useNavigate();
 
 
     function chamadoInput(e){
@@ -40,7 +41,12 @@ function ChamadoEdit () {
     }
 
     useEffect(() => {
-        window.sessionStorage.setItem("usuarioId", "56a44e49-05b6-4fb4-8f58-8a4ec459dbe7");
+
+        function sessionCheck() {         
+            if(!window.sessionStorage.getItem("usuarioId")){
+              navigate("/");
+            };
+        }
 
         function getData() {         
             api.get(`/chamado/${id}`).then((res) => {
@@ -53,6 +59,7 @@ function ChamadoEdit () {
                 setInteracaoArchives(res.data);
             });       
         }
+        sessionCheck();
         getData();
     },[])
 

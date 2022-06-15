@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 
 import api from '../../services/api';
 
 import Header from '../../components/Header';
 
-import styles from '../../styles/Dashboard/app.css';
+import '../Dashboard/dashboard.css';
 
 function Dashboard() {
 
@@ -16,6 +16,8 @@ function Dashboard() {
     const resourceInteracao = "/interacao"
     const resourceMinIO = "/MinIO"
     const Swal = require('sweetalert2');
+    const navigate = useNavigate();
+
 
 
     function deleteChamados(e){
@@ -51,12 +53,19 @@ function Dashboard() {
 
     useEffect(()=> {
 
+      function sessionCheck() {         
+        if(!window.sessionStorage.getItem("usuarioId")){
+          navigate("/");
+        };
+      }
+
       async function loadChamados(){
         const response = await api.get(`${resourceChamado}/all/${userId}`);
 
         if(response.data.length > 0){ setChamados(response.data) }else{setChamados([]) };        
       }
 
+      sessionCheck();
       loadChamados();
 
     }, [] )
@@ -87,8 +96,8 @@ function Dashboard() {
                         <td>{chamado.tipo}</td>
                         <td>{chamado.descricao}</td>
                         <td>{chamado.data}</td>
-                        <td class="td-editar"><Link to={`${resourceChamado}/edit/${chamado.id}`} ><button className='table-editar'>Editar</button></Link></td>
-                        <td class="td-deletar"><button className='table-deletar' id={chamado.id} name={index} onClick={(e) => deleteChamados(e)} > Deletar </button></td>
+                        <td className="td-editar"><Link to={`${resourceChamado}/edit/${chamado.id}`} ><button className='table-editar'>Editar</button></Link></td>
+                        <td className="td-deletar"><button className='table-deletar' id={chamado.id} name={index} onClick={(e) => deleteChamados(e)} > Deletar </button></td>
                       </tr>
                     )
                   })}  
