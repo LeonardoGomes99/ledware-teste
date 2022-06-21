@@ -1,0 +1,17 @@
+form {
+    
+}
+
+.form-inputs {
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-buttons {
+    margin-top: 50px;
+}
+
+.form-buttons button {
+}

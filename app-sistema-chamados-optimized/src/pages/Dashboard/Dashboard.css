@@ -1,0 +1,16 @@
+.body-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px black solid;
+}
+
+.body-dashboard-button{
+
+}
+
+.body-dashboard-table{
+}
+
+.body-dashboard-table table{
+}

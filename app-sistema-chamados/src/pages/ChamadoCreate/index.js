@@ -13,7 +13,7 @@ function ChamadoCreate () {
 
     const { id , setId } = useState();
 
-    const [ChamadoId , setChamadoId ] = useState();
+    const [ChamadoId , setChamadoId, CurrentChamadoId ] = useState();
 
     const [chamado,setChamado] = useState({});
     const [interacao, setInteracao] = useState();
@@ -53,7 +53,8 @@ function ChamadoCreate () {
             };
         }
 
-        function getData() {         
+        function getData() {   
+                  
             api.get(`/interacao/getAllByChamadoId/${id}`).then((res) => {
                 setInteracao(res.data);
             });               
@@ -62,37 +63,12 @@ function ChamadoCreate () {
             });       
         }
         sessionCheck();
+        setChamadoId('')
         getData();
     },[])
 
-    function getData(chamadoId) { 
-        if(chamadoId){
-            api.get(`/interacao/getAllByChamadoId/${chamadoId}`).then((res) => {
-                setInteracao(res.data);
-            });             
-            api.get(`/MinIO/all/${chamadoId}`).then((res) => {
-                setInteracaoArchives(res.data);
-            }); 
-        }
-        ChamadoId(chamadoId);
-         
-    }
-
-    function getInteracao(){
-        api.get(`/interacao/getAllByChamadoId/${ChamadoId}`).then((res) => {
-            setInteracao(res.data);
-            api.get(`/MinIO/all/${ChamadoId}`).then((res) => {
-                setInteracaoArchives(res.data);                
-            });  
-        }).then((res) => {
-            document.getElementById('interacoes-to-load').innerHTML = "";             
-        });              
-    }
-
     function storeChamado(){
         const data = getDateTime();
-
-
         const params = {
             "assunto" : chamado['assunto'],
             "tipo" : chamado['tipo'],
@@ -117,11 +93,21 @@ function ChamadoCreate () {
                         return;
                     }
                     Swal.fire('Cadastrado!','Seu chamado foi atualizado com sucesso.','success');  
+                    setChamadoId(response.data.id)
                     getData(response.data.id);  
                     setChamadoState(true);                  
                 });
             }
           })
+    }
+
+    function getData() { 
+        api.get(`/interacao/getAllByChamadoId/${ChamadoId}`).then((res) => {
+            setInteracao(res.data);
+        });             
+        api.get(`/MinIO/all/${ChamadoId}`).then((res) => {
+            setInteracaoArchives(res.data);
+        });        
     }
 
     function updateInteracao(e){
@@ -177,8 +163,9 @@ function ChamadoCreate () {
             if (result.isConfirmed) {
                 api.delete(`/MinIO/deleteAllByInteracaoId/${idInteracaoToDeleteAll}`).then(function(response){
                     api.delete(`/interacao/${idInteracaoToDeleteAll}`).then(function(response){
-                        Swal.fire('Excluído!','Sua interação foi excluída com sucesso.','success')                    
-                        getData(ChamadoId);
+                        Swal.fire('Excluído!','Sua interação foi excluída com sucesso.','success')     
+                        setInteracao();               
+                        getData();
                     }).catch(function(res) {
                         Swal.fire('Erro','Não foi possível excluir essa interação','error');
                     });
@@ -326,7 +313,7 @@ function ChamadoCreate () {
         <div>
 
         <Header/>
-        {modalOpen && <Modal setOpenModal={setModalOpen} chamadoIdModal={ChamadoId} usuarioIdModal={usuarioId} getAllFunction={getData()} />}
+        {modalOpen && <Modal setOpenModal={setModalOpen} chamadoIdModal={ChamadoId} usuarioIdModal={usuarioId} />}
 
         <div className='main-container'>
             <div className='chamado-container'>
@@ -380,7 +367,7 @@ function ChamadoCreate () {
                         <button className='refresh-interacao-button' onClick={() => {getData()}} > Atualizar </button>        
                     </div>
                     <div className='create-new-interacao-container'>
-                        <button className='create-new-interacao-button' onClick={() => {setModalOpen(true);}} > + Cadastrar Nova Interação</button>        
+                        <button className='create-new-interacao-button' onClick={() => {setModalOpen(true)}} disabled={!chamadoState} > + Cadastrar Nova Interação</button>        
                     </div>
                 </div>
             <hr/>

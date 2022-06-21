@@ -5,6 +5,7 @@ import { Link,useParams,useNavigate } from 'react-router-dom'
 import '../../styles/Chamado/app.css';
 
 import Header from '../../components/Header';
+import Modal from '../../components/Modal';
 
 const Swal = require('sweetalert2')
 
@@ -17,6 +18,8 @@ function ChamadoEdit () {
     const [interacaoArchives, setInteracaoArchives] = useState();
     const [usuarioId] = useState(window.sessionStorage.getItem("usuarioId"));
     const [fileUpload, setFileUpload] = useState();
+    const [modalOpen, setModalOpen] = useState(false);
+    const [chamadoState, setChamadoState] = useState(false);
     const navigate = useNavigate();
 
 
@@ -73,23 +76,6 @@ function ChamadoEdit () {
         api.get(`/MinIO/all/${id}`).then((res) => {
             setInteracaoArchives(res.data);
         });       
-    }
-
-    function createInteracao(){
-        Swal.fire({
-            title: '<strong>Criação de Interação</strong>',
-            icon: 'info',
-            html:{createInteracaoForm},
-            showCloseButton: true,
-            showCancelButton: true,
-            focusConfirm: false,
-            confirmButtonText:
-              '<i class="fa fa-thumbs-up"></i> Great!',
-            confirmButtonAriaLabel: 'Thumbs up, legal!',
-            cancelButtonText:
-              '<i class="fa fa-thumbs-down"></i>',
-            cancelButtonAriaLabel: 'Thumbs down'
-        })
     }
 
     function hey(){
@@ -169,8 +155,6 @@ function ChamadoEdit () {
         const interacaoDelete = interacao.filter(p => p.id == event.target.id)
         const idInteracaoToDeleteAll = interacaoDelete[0]['id'];
 
-        console.log(idInteracaoToDeleteAll);
-
         Swal.fire({
         title: 'Tem certeza que deseja excluir essa interação?',
             text: "Não poderá reverter!",
@@ -184,7 +168,8 @@ function ChamadoEdit () {
             if (result.isConfirmed) {
                 api.delete(`/MinIO/deleteAllByInteracaoId/${idInteracaoToDeleteAll}`).then(function(response){
                     api.delete(`/interacao/${idInteracaoToDeleteAll}`).then(function(response){
-                        Swal.fire('Excluído!','Sua interação foi excluída com sucesso.','success')                    
+                        Swal.fire('Excluído!','Sua interação foi excluída com sucesso.','success')  
+                        setInteracao();                  
                         getData();
                     }).catch(function(res) {
                         Swal.fire('Erro','Não foi possível excluir essa interação','error');
@@ -306,14 +291,6 @@ function ChamadoEdit () {
           })
     }
 
-    function createInteracaoForm(){
-        return(
-          <div>
-            <button onClick={() => {hey()}} />
-          </div>  
-        );
-    }
-
     function ListFiles(interacaoId){
         return(
             interacaoArchives?.map((e,index) => {
@@ -341,6 +318,7 @@ function ChamadoEdit () {
         <div>
 
         <Header/>
+        {modalOpen && <Modal setOpenModal={setModalOpen} chamadoIdModal={id} usuarioIdModal={usuarioId} />}
 
         <div className='main-container'>
             <div className='chamado-container'>
@@ -389,8 +367,13 @@ function ChamadoEdit () {
             </div>
 
             <div className='interacao-container'>
-                <div className='create-new-interacao-container'>
-                    <button className='create-new-interacao-button' onClick={() => {createInteracao()}} > + Cadastrar Nova Interação</button>
+                <div className='interacao-controls'>
+                    <div className='refresh-interacao-container'>
+                        <button className='refresh-interacao-button' onClick={() => {getData()}} > Atualizar </button>        
+                    </div>
+                    <div className='create-new-interacao-container'>
+                        <button className='create-new-interacao-button' onClick={() => {setModalOpen(true)}}> + Cadastrar Nova Interação</button>        
+                    </div>
                 </div>
             {interacao?.map((e,index) => {
                 return(

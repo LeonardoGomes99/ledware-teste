@@ -29,7 +29,6 @@ function Modal({ setOpenModal, chamadoIdModal, usuarioIdModal, getAllFunction })
             }
             Swal.fire('Cadastrado!','Sua interação foi criada com sucesso.','success') 
             setOpenModal(false)
-            getAllFunction();
         })
     }
 
