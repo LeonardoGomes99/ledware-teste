@@ -5,6 +5,14 @@ import Footer from '../../components/Footer';
 import './Dashboard.css';
 
 export default function Dashboard() {
+
+
+    useEffect(()=>{
+        console.log('Hello');
+    
+      }, []);
+
+
     return(
         <div>
             <Header/>
@@ -16,7 +24,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className='body-dashboard-table'>
-                    <TableDashboard/>
+                    <TableDashboard />
                 </div>
 
             </div>

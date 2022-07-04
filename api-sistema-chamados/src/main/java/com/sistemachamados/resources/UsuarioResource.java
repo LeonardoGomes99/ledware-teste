@@ -49,6 +49,7 @@ public class UsuarioResource {
 		if(usuarioService.existsByEmail(usuarioDto.getEmail())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Email já sendo Utilizado! ");
         }
+		
 		var usuarioModel = new UsuarioModel();
 		BeanUtils.copyProperties(usuarioDto, usuarioModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarioModel));

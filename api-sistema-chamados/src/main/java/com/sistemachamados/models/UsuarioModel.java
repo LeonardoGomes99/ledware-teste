@@ -27,6 +27,21 @@ public class UsuarioModel implements Serializable{
 	@Column(name = "senha", nullable = false, length = 255)
     private String senha;
 	
+	
+	public UsuarioModel() {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+	}
+	
+	public UsuarioModel(UUID id, String nome, String email, String senha) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+	}
+	
 	public UUID getId() {
 		return id;
 	}

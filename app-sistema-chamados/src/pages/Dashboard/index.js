@@ -11,7 +11,7 @@ function Dashboard() {
 
     const [chamados, setChamados] = useState([]);
     const [status, setStatus] = useState([]);
-    const userId = "56a44e49-05b6-4fb4-8f58-8a4ec459dbe7";
+    const userId = (window.sessionStorage.getItem("usuarioId"));
     const resourceChamado = "/chamado"
     const resourceInteracao = "/interacao"
     const resourceMinIO = "/MinIO"
